@@ -1,0 +1,53 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+  static_volume:
+  elasticsearch-data:
+    driver: local
+
+services:
+  db:
+    image: postgres:13.0-alpine
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./postgres/create_database.ddl:/create_database.ddl
+    env_file:
+      - ./.env
+  web:
+    build: .
+    restart: always
+    volumes:
+      - static_volume:/app/static/
+    expose:
+      - 8000
+    depends_on:
+      - elastic
+    env_file:
+      - ./.env
+  nginx:
+    image: nginx:latest
+    volumes:
+      - static_volume:/data/static/:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites.conf:/etc/nginx/conf.d/sites.conf
+    ports:
+      - "8000:80"
+    depends_on:
+      - web
+  elastic:
+    image: elasticsearch:7.17.0
+    ports:
+      - "9200:9200"
+    environment:
+      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    depends_on:
+      - db

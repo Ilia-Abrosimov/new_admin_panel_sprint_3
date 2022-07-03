@@ -1,0 +1,4 @@
+.idea
+/postgres_to_es/.env
+venv
+__pycache__/
