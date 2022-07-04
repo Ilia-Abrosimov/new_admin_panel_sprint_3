@@ -32,17 +32,17 @@ def elastic_load_data():
            'port': DB_PORT}
     es_host = f"http://{ES_HOST}:{ES_PORT}"
     state = state_init()
+    es_saver = ElasticLoader(es_host=es_host)
+    if not es_saver.es.indices.exists(index="movies"):
+        schema = open("elastic_schema.json", "r")
+        data = json.loads(schema.read())
+        es_saver.es.indices.create(index='movies', body=data)
     while True:
         try:
             with closing(psycopg2.connect(**dsl, cursor_factory=DictCursor)) as pg_conn, pg_conn.cursor() as curs:
                 date_from = state.get_state('date_from')
                 offset = state.get_state('offset')
                 postgres_loader = PGSaver(pg_conn, curs, offset)
-                es_saver = ElasticLoader(es_host=es_host)
-                if not es_saver.es.indices.exists(index="movies"):
-                    schema = open("elastic_schema.json", "r")
-                    data = json.loads(schema.read())
-                    es_saver.es.indices.create(index='movies', body=data)
                 table_names = ['film_work', 'person', 'genre']
                 for table_name in table_names:
                     while True:
