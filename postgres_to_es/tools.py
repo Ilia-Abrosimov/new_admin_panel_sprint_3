@@ -3,7 +3,10 @@ from functools import wraps
 from time import sleep
 
 
-def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10):
+logger = logging.getLogger(__name__)
+
+
+def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10, logger=logger):
     """
     Функция для повторного выполнения функции через некоторое время.
     """
@@ -18,7 +21,7 @@ def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10):
                     result = func(*args, **kwargs)
                     break
                 except Exception as error:
-                    logging.error(error)
+                    logger.error(error)
                     if time_for_sleep >= border_sleep_time:
                         time_for_sleep = border_sleep_time
                     else:
