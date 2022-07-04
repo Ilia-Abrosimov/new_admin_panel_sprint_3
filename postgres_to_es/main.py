@@ -12,13 +12,25 @@ from models import FilmWork
 from pg_extract import BATCH_SIZE, PGSaver
 from state_control import state_init
 from transform import parse_films_to_es_model
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = os.environ.get('DB_PORT')
+ES_HOST = os.environ.get('ES_HOST')
+ES_PORT = os.environ.get('ES_PORT')
 
 
 def elastic_load_data():
-    dsl = {'dbname': "test_db", 'user': "test_user",
-           'password': "123qwe", 'host': "db",
-           'port': 5432}
-    es_host = "http://elastic:9200"
+    dsl = {'dbname': DB_NAME, 'user': DB_USER,
+           'password': DB_PASSWORD, 'host': DB_HOST,
+           'port': DB_PORT}
+    es_host = f"http://{ES_HOST}:{ES_PORT}"
     state = state_init()
     while True:
         try:
