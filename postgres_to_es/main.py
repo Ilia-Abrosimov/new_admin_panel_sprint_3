@@ -54,15 +54,15 @@ def elastic_load_data():
                             FilmWork.parse_obj(data)
                             for data in postgres_loader.get_filmworks(filmwork_ids)
                         ]
-                        postgres_loader.offset += BATCH_SIZE
-                        state.set_state('offset', postgres_loader.offset)
-
                         es_film_works = []
                         for film_id in filmwork_ids:
                             film_data = list(filter(lambda x: x.fw_id == film_id, filmwork_data))
                             es_film_works.append(parse_films_to_es_model(film_data, film_id))
 
-                        es_saver.send_data(es_saver.es, es_film_works)
+                        response = es_saver.send_data(es_saver.es, es_film_works)
+                        if response:
+                            postgres_loader.offset += BATCH_SIZE
+                            state.set_state('offset', postgres_loader.offset)
 
                     state.set_state('offset', 0)
 
