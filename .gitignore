@@ -2,3 +2,4 @@
 /postgres_to_es/.env
 venv
 __pycache__/
+/postgres_to_es/data.json
