@@ -8,31 +8,17 @@ import psycopg2
 from psycopg2.extras import DictCursor
 
 from es_loader import ElasticLoader
-from models import FilmWork
+from models import FilmWork, PGSettings, ESSettings
 from pg_extract import BATCH_SIZE, PGSaver
 from state_control import state_init
 from transform import parse_films_to_es_model
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-DB_NAME = os.environ.get('DB_NAME')
-DB_USER = os.environ.get('DB_USER')
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_HOST = os.environ.get('DB_HOST')
-DB_PORT = os.environ.get('DB_PORT')
-ES_HOST = os.environ.get('ES_HOST')
-ES_PORT = os.environ.get('ES_PORT')
 
 
 def elastic_load_data():
-    dsl = {'dbname': DB_NAME, 'user': DB_USER,
-           'password': DB_PASSWORD, 'host': DB_HOST,
-           'port': DB_PORT}
-    es_host = f"http://{ES_HOST}:{ES_PORT}"
+    dsl = PGSettings().dict()
+    es_host = ESSettings().dict()
     state = state_init()
-    es_saver = ElasticLoader(es_host=es_host)
+    es_saver = ElasticLoader(**es_host)
     if not es_saver.es.indices.exists(index="movies"):
         schema = open("elastic_schema.json", "r")
         data = json.loads(schema.read())

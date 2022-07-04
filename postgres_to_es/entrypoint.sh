@@ -10,7 +10,7 @@ echo "Waiting for postgres..."
 
 echo "Waiting for elastic..."
 
-    while ! nc -z $ES_HOST $ES_PORT; do
+    while ! nc -z $Elastic_host $ES_PORT; do
       sleep 0.1
     done
 
