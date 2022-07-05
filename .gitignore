@@ -1,5 +1,7 @@
 .idea
 /postgres_to_es/.env
+/postgres_to_es/admin_panel/.env
+/postgres_to_es/etl/.env
 venv
 __pycache__/
 /postgres_to_es/data.json

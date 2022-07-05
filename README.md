@@ -2,6 +2,11 @@
 
 Ваша задача в этом уроке — загрузить данные в Elasticsearch из PostgreSQL. Подробности задания в папке `etl`.
 
+Для запуска в режиме разработки
+
+
+    `docker-compose -f docker-compose.dev.yml up -d`
+
 Для запуска сервис необходимо выполнить следующие действия:
 
 1. Создать схему БД 
@@ -22,4 +27,4 @@
 4. Запустить перенос данных из postgresql в elasticsearch
 
     
-    `cd .. && python main.py`
+    `docker compose exec etl python main.py`
