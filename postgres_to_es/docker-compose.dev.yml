@@ -19,7 +19,9 @@ services:
     env_file:
       - ./.env
   web:
-    build: .
+    build:
+      context: ./admin_panel
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - static_volume:/app/static/
