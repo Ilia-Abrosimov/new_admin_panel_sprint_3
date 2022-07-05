@@ -23,6 +23,8 @@ services:
     restart: always
     volumes:
       - static_volume:/app/static/
+    expose:
+      - 8000
     depends_on:
       - elastic
     env_file:
@@ -39,8 +41,8 @@ services:
       - web
   elastic:
     image: elasticsearch:7.17.0
-    expose:
-      - 9200
+    ports:
+      - "9200:9200"
     environment:
       - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
       - discovery.type=single-node
