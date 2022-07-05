@@ -51,3 +51,15 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     depends_on:
       - db
+  etl:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - db
+      - web
+      - elastic
+      - nginx
+    env_file:
+      - ./.env

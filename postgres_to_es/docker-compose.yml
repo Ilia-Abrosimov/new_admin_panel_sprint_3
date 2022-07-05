@@ -39,8 +39,6 @@ services:
       - web
   elastic:
     image: elasticsearch:7.17.0
-    expose:
-      - 9200
     environment:
       - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
       - discovery.type=single-node
@@ -49,3 +47,15 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     depends_on:
       - db
+  etl:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - db
+      - web
+      - elastic
+      - nginx
+    env_file:
+      - ./.env
