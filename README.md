@@ -1,4 +1,6 @@
-# Backend of administration part of online cinema. Project consists of three sections:
+# Backend of administration part of online cinema.
+
+Project consists of three sections:
 1. [/postgres_to_es/admin_panel/](https://github.com/Ilia-Abrosimov/new_admin_panel_sprint_3/tree/main/postgres_to_es/admin_panel)
 
     Application to load movies through Django admin panel.
