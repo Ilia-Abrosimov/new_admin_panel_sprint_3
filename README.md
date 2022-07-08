@@ -37,7 +37,7 @@ docker-compose -f docker-compose.dev.yml up -d
 1. Create database schema
 
 ```bash
-docker compose exec db psql -h 127.0.0.1 -U DB_USER -d DB_NAME -f create_database.ddl`
+docker compose exec db psql -h 127.0.0.1 -U DB_USER -d DB_NAME -f create_database.ddl
 ```
 
 2. Enter in web service
@@ -55,5 +55,5 @@ cd sql_to_postgres && python load_data.py
 4. Start ETL proccess
 
 ```bash
-docker compose exec etl python main.py`
+docker compose exec etl python main.py
 ```
